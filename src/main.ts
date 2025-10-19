@@ -91,7 +91,7 @@ class TikTokLoginBot {
   async init(): Promise<void> {
     console.log('🚀 Khởi tạo browser như user thật...');
     this.browser = await puppeteer.launch({
-      headless: false, // Hiển thị browser để debug
+      headless: true, // Hiển thị browser để debug
       defaultViewport: null,
       args: [
         '--incognito', // Mở browser ở chế độ ẩn danh
@@ -485,7 +485,9 @@ class TikTokLoginBot {
     console.log(`🎲 Random Timezone: ${randomTimezone}`);
     console.log(`🎲 Random Locale: ${randomLocale}`);
     console.log('🌐 Sử dụng IP thật (không dùng proxy)');
-    
+     // Kiểm tra môi trường
+     const isProduction = process.env.NODE_ENV === 'production';
+     const isRailway = process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID;
     // Tạo args array
     const args = [
       '--incognito', // Mở browser ở chế độ ẩn danh
@@ -566,7 +568,7 @@ class TikTokLoginBot {
     
     // Launch options
     const launchOptions: any = {
-      headless: false,
+      headless: true,
       ignoreDefaultArgs: true,
       defaultViewport: null,
       userDataDir: userDataDir, // Sử dụng profile mới
