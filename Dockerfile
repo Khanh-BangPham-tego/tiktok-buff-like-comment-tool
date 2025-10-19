@@ -26,8 +26,8 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearm
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
-RUN npm ci
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
 # Copy source code
 COPY . .
@@ -36,10 +36,10 @@ COPY . .
 RUN npx tsc
 
 # Remove dev dependencies sau khi build
-RUN npm prune --production
+RUN yarn install --production --ignore-scripts
 
 # Expose port
 EXPOSE 3000
 
-# Start app - sử dụng server.js thay vì dist/main.js
+# Start app
 CMD ["node", "server.js"]
