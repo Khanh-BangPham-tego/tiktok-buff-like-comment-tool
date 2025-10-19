@@ -26,8 +26,8 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearm
 WORKDIR /app
 
 # Copy package files
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY package*.json ./
+RUN npm install
 
 # Copy source code
 COPY . .
@@ -36,7 +36,7 @@ COPY . .
 RUN npx tsc
 
 # Remove dev dependencies sau khi build
-RUN yarn install --production --ignore-scripts
+RUN npm prune --production
 
 # Expose port
 EXPOSE 3000
