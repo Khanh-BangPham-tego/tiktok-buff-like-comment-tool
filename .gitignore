@@ -116,9 +116,6 @@ chrome-user-data/
 firefox-user-data/
 edge-user-data/
 
-# Account files (sensitive data)
-accounts.txt
-*.txt
 
 # Screenshots and downloads
 screenshots/
