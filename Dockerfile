@@ -32,9 +32,6 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Tạo file accounts.txt mẫu nếu không tồn tại
-COPY accounts.txt ./accounts.txt
-
 # Biên dịch TypeScript
 RUN npx tsc
 
