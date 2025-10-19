@@ -27,13 +27,16 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy source code
 COPY . .
 
 # Biên dịch TypeScript
 RUN npx tsc
+
+# Remove dev dependencies sau khi build
+RUN npm prune --production
 
 # Expose port
 EXPOSE 3000
