@@ -67,32 +67,41 @@ app.post('/api/scrape', async (req, res) => {
         
         // Chạy scraper bất đồng bộ (không block response)
         setImmediate(async () => {
+            const processId = Math.random().toString(36).substr(2, 9);
+            const timestamp = new Date().toISOString();
+            let bot = null;
+            
             try {
-                console.log('🤖 Bắt đầu TikTok scraper (chạy ngầm)...');
+                console.log(`[${timestamp}] [${processId}] 🤖 Bắt đầu TikTok scraper (chạy ngầm)...`);
+                console.log(`[${timestamp}] [${processId}] 📊 Payload:`, JSON.stringify(payload, null, 2));
+                
                 const { TikTokLoginBot } = require('./dist/main.js');
-                const bot = new TikTokLoginBot();
+                bot = new TikTokLoginBot();
                 
                 // Đăng nhập TikTok
-                console.log('🔐 Đang đăng nhập TikTok...');
+                console.log(`[${timestamp}] [${processId}] 🔐 Đang đăng nhập TikTok...`);
                 await bot.login(true); // Sử dụng Chrome thật
                 
                 // Navigate đến profile của account
-                console.log(`👤 Đang navigate đến profile: @${payload.accountId}`);
+                console.log(`[${timestamp}] [${processId}] 👤 Đang navigate đến profile: @${payload.accountId}`);
                 await bot.navigateToProfile(payload.accountId);
                 
                 // Giữ browser mở để xem kết quả
-                console.log('⏳ Giữ browser mở trong 60 giây để xem kết quả...');
+                console.log(`[${timestamp}] [${processId}] ⏳ Giữ browser mở trong 60 giây để xem kết quả...`);
                 await new Promise(resolve => setTimeout(resolve, 60000));
                 
-                console.log('✅ Scraping hoàn thành!');
+                console.log(`[${timestamp}] [${processId}] ✅ Scraping hoàn thành!`);
                 
             } catch (scraperError) {
-                console.error('❌ Lỗi khi chạy scraper (ngầm):', scraperError);
+                console.error(`[${timestamp}] [${processId}] ❌ Lỗi khi chạy scraper (ngầm):`, scraperError);
             } finally {
-                try {
-                    await bot.close();
-                } catch (closeError) {
-                    console.error('❌ Lỗi khi đóng browser:', closeError);
+                if (bot) {
+                    try {
+                        await bot.close();
+                        console.log(`[${timestamp}] [${processId}] 🔒 Browser đã được đóng`);
+                    } catch (closeError) {
+                        console.error(`[${timestamp}] [${processId}] ❌ Lỗi khi đóng browser:`, closeError);
+                    }
                 }
             }
         });
