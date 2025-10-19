@@ -67,7 +67,6 @@ coverage/
 
 # Gatsby files
 .cache/
-# public  <-- XÓA DÒNG NÀY
 
 # Storybook build outputs
 .out

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Tool - Video Scraper</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎵 TikTok Video Scraper</h1>
+            <p>Nhập thông tin để bắt đầu scrape video TikTok</p>
+        </header>
+
+        <main class="main-content">
+            <form id="scraperForm" class="form">
+                <div class="form-group">
+                    <label for="accountId" class="form-label">
+                        📱 Account ID hoặc Link
+                    </label>
+                    <input 
+                        type="text" 
+                        id="accountId" 
+                        name="accountId" 
+                        class="form-input"
+                        placeholder="Nhập @user6549097821308 hoặc https://www.tiktok.com/@user6549097821308"
+                        required
+                    >
+                    <small class="form-help">
+                        Có thể nhập username (@user6549097821308) hoặc full link TikTok
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="videoUrls" class="form-label">
+                        🎬 Danh sách Video URLs
+                    </label>
+                    <textarea 
+                        id="videoUrls" 
+                        name="videoUrls" 
+                        class="form-textarea"
+                        rows="8"
+                        placeholder="Nhập danh sách video URLs, mỗi URL một dòng:&#10;https://www.tiktok.com/@kimberlykimpena/video/7548676769721650462?is_from_webapp=1&sender_device=pc&#10;https://www.tiktok.com/@fff66043/video/7530470979471084807?is_from_webapp=1&sender_device=pc"
+                        required
+                    ></textarea>
+                    <small class="form-help">
+                        Mỗi video URL một dòng. Hỗ trợ format TikTok chuẩn
+                    </small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span class="btn-text">🚀 Bắt đầu Scrape</span>
+                        <span class="btn-loading" style="display: none;">
+                            <span class="spinner"></span>
+                            Đang xử lý...
+                        </span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="clearBtn">
+                        🗑️ Xóa tất cả
+                    </button>
+                </div>
+            </form>
+
+            <div id="result" class="result-section" style="display: none;">
+                <h3>📊 Kết quả</h3>
+                <div id="resultContent" class="result-content"></div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>💡 Tool được tối ưu để tránh detection và giống user thật</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
