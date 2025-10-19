@@ -91,84 +91,23 @@ class TikTokLoginBot {
   async init(): Promise<void> {
     console.log('🚀 Khởi tạo browser như user thật...');
     this.browser = await puppeteer.launch({
-      headless: true, // Hiển thị browser để debug
+      headless: true, // Chạy hoàn toàn headless
       defaultViewport: null,
+      ignoreDefaultArgs: ['--enable-automation'], // loại flag bật automation mặc định
       args: [
-        '--incognito', // Mở browser ở chế độ ẩn danh
+        // '--headless=new',
+        '--incognito',
         '--no-sandbox',
-        '--disable-setuid-sandbox',
+        //'--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
         '--no-first-run',
         '--no-zygote',
-        '--disable-gpu',
-        '--disable-blink-features=AutomationControlled',
-        '--disable-features=VizDisplayCompositor',
-        '--disable-web-security',
-        '--disable-features=TranslateUI',
-        '--disable-ipc-flooding-protection',
-        '--disable-renderer-backgrounding',
-        '--disable-backgrounding-occluded-windows',
-        '--disable-client-side-phishing-detection',
-        '--disable-sync',
-        '--disable-default-apps',
-        '--disable-extensions-except',
-        '--disable-plugins-discovery',
-        '--disable-preconnect',
-        '--disable-hang-monitor',
-        '--disable-prompt-on-repost',
-        '--disable-domain-reliability',
-        '--disable-component-extensions-with-background-pages',
-        '--disable-background-timer-throttling',
-        '--disable-renderer-backgrounding',
-        '--disable-backgrounding-occluded-windows',
-        '--disable-features=TranslateUI',
-        '--disable-ipc-flooding-protection',
-        '--no-default-browser-check',
-        '--no-pings',
-        '--password-store=basic',
-        '--use-mock-keychain',
-        '--disable-component-update',
-        '--disable-background-networking',
-        '--disable-default-apps',
+        // '--disable-gpu',
+        '--mute-audio',
         '--disable-extensions',
-        '--disable-sync',
-        '--metrics-recording-only',
-        '--no-first-run',
-        '--safebrowsing-disable-auto-update',
-        '--enable-automation',
-        '--disable-automation',
-        '--disable-blink-features=AutomationControlled',
-        '--exclude-switches=enable-automation',
-        '--disable-extensions-except',
-        '--disable-plugins-discovery',
-        '--disable-preconnect',
-        '--disable-hang-monitor',
-        '--disable-prompt-on-repost',
-        '--disable-domain-reliability',
-        '--disable-component-extensions-with-background-pages',
-        '--disable-background-timer-throttling',
-        '--disable-renderer-backgrounding',
-        '--disable-backgrounding-occluded-windows',
-        '--disable-features=TranslateUI',
-        '--disable-ipc-flooding-protection',
-        '--no-default-browser-check',
-        '--no-pings',
-        '--password-store=basic',
-        '--use-mock-keychain',
-        '--disable-component-update',
-        '--disable-background-networking',
-        '--disable-default-apps',
-        '--disable-extensions',
-        '--disable-sync',
-        '--metrics-recording-only',
-        '--no-first-run',
-        '--safebrowsing-disable-auto-update',
-        '--enable-automation',
-        '--disable-automation',
-        '--disable-blink-features=AutomationControlled',
-        '--exclude-switches=enable-automation'
-      ]
+        '--disable-infobars',
+        '--window-size=1366,768',
+      ],
     });
     
     // this.page = await this.browser.newPage();
@@ -490,77 +429,27 @@ class TikTokLoginBot {
      const isRailway = process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID;
     // Tạo args array
     const args = [
-      '--incognito', // Mở browser ở chế độ ẩn danh
+      //'--headless=new',
+      '--incognito',
       '--no-sandbox',
-      '--disable-setuid-sandbox',
+      // '--disable-setuid-sandbox',
       '--disable-dev-shm-usage',
-      '--disable-accelerated-2d-canvas',
       '--no-first-run',
       '--no-zygote',
       '--disable-gpu',
+      '--mute-audio',
+      '--disable-extensions',
+      '--disable-infobars',
+      '--window-size=1366,768',
+
+      '--disable-accelerated-2d-canvas',
       '--disable-blink-features=AutomationControlled',
       '--disable-features=VizDisplayCompositor',
       '--disable-web-security',
       '--disable-features=TranslateUI',
-      '--disable-ipc-flooding-protection',
-      '--disable-renderer-backgrounding',
-      '--disable-backgrounding-occluded-windows',
-      '--disable-client-side-phishing-detection',
-      '--disable-sync',
-      '--disable-default-apps',
-      '--disable-extensions',
-      '--disable-sync',
-      '--metrics-recording-only',
-      '--no-first-run',
-      '--safebrowsing-disable-auto-update',
-      '--disable-blink-features=AutomationControlled',
-      '--exclude-switches=enable-automation',
-      `--lang=${randomLocale}`,
-      `--timezone=${randomTimezone}`,
-      // Thêm các args để tránh detection
-      '--disable-background-timer-throttling',
-      '--disable-backgrounding-occluded-windows',
-      '--disable-renderer-backgrounding',
-      '--disable-features=TranslateUI',
-      '--disable-ipc-flooding-protection',
-      '--no-default-browser-check',
-      '--no-pings',
-      '--password-store=basic',
-      '--use-mock-keychain',
-      '--disable-component-update',
-      '--disable-background-networking',
-      '--disable-default-apps',
-      '--disable-extensions',
-      '--disable-sync',
-      '--metrics-recording-only',
-      '--no-first-run',
-      '--safebrowsing-disable-auto-update',
-      '--disable-blink-features=AutomationControlled',
-      '--exclude-switches=enable-automation',
-      // Thêm args để randomize fingerprint
-      '--disable-features=VizDisplayCompositor',
-      '--disable-accelerated-2d-canvas',
-      '--disable-gpu-sandbox',
-      '--disable-software-rasterizer',
-      '--disable-background-timer-throttling',
-      '--disable-backgrounding-occluded-windows',
-      '--disable-renderer-backgrounding',
-      '--disable-features=TranslateUI',
-      '--disable-ipc-flooding-protection',
-      '--no-default-browser-check',
-      '--no-pings',
-      '--password-store=basic',
-      '--use-mock-keychain',
-      '--disable-component-update',
-      '--disable-background-networking',
-      '--disable-default-apps',
-      '--disable-extensions',
-      '--disable-sync',
-      '--metrics-recording-only',
-      '--no-first-run',
-      '--safebrowsing-disable-auto-update',
-      '--disable-blink-features=AutomationControlled',
-      '--exclude-switches=enable-automation'
+
+
+
     ];
     
     // Tìm Chrome executable nếu cần
@@ -569,7 +458,7 @@ class TikTokLoginBot {
     // Launch options
     const launchOptions: any = {
       headless: true,
-      ignoreDefaultArgs: true,
+      ignoreDefaultArgs: ['--enable-automation'],
       defaultViewport: null,
       userDataDir: userDataDir, // Sử dụng profile mới
       args: args
@@ -1238,9 +1127,45 @@ class TikTokLoginBot {
       // Đợi một chút để xem kết quả
       await this.delay(5000);
       
+      // // Kiểm tra form đăng nhập có thẻ báo lỗi hay không
+      await this.checkLoginFormErrors();
+      
     } catch (error) {
       console.error('❌ Lỗi khi submit form:', error);
       throw error;
+    }
+  }
+
+  async checkLoginFormErrors(): Promise<void> {
+    try {
+      if (!this.page) {
+        console.log('⚠️ Page không tồn tại, không thể kiểm tra form errors');
+        return;
+      }
+      
+      console.log('🔍 Kiểm tra form đăng nhập có thẻ báo lỗi hay không...');
+      
+      let errorElement = await this.page.waitForSelector('#loginContainer div[type="error"] span', { timeout: 10000 });
+
+      
+      if (errorElement) {
+        const errorText = await errorElement.evaluate(el => el.textContent?.trim() || '');
+        console.log('❌ ===== FORM ĐĂNG NHẬP CÓ LỖI =====');
+        console.log('📋 Danh sách lỗi được phát hiện:');
+        console.log(errorText);
+        console.log('=====================================');
+        // Throw error để dừng quá trình đăng nhập 
+        throw new Error(`Form đăng nhập có lỗi: ${errorText}`);
+      } else {
+        console.log('✅ Không phát hiện lỗi nào trong form đăng nhập');
+      }
+      
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('Form đăng nhập có lỗi')) {
+        throw error; // Re-throw login form errors
+      }
+      console.log('⚠️ Lỗi khi kiểm tra form errors:', error instanceof Error ? error.message : String(error));
+      // Don't throw here, just log the error
     }
   }
 
