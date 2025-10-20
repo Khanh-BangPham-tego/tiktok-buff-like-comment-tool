@@ -1,0 +1,51 @@
+{
+  "isPaused": false,
+  "currentTaskIndex": 4,
+  "tasks": [
+    {
+      "id": "task_1760916671750_uhmhx5cch",
+      "name": "Create Fresh Browser",
+      "status": "completed",
+      "startTime": "2025-10-19T23:31:11.788Z",
+      "endTime": "2025-10-19T23:31:15.622Z"
+    },
+    {
+      "id": "task_1760916671751_c0lbcz9ok",
+      "name": "Create Persistent Session",
+      "status": "completed",
+      "startTime": "2025-10-19T23:31:15.624Z",
+      "endTime": "2025-10-19T23:31:15.645Z"
+    },
+    {
+      "id": "task_1760916671754_4a966zk6q",
+      "name": "Random Mouse Movement",
+      "status": "completed",
+      "startTime": "2025-10-19T23:31:15.689Z",
+      "endTime": "2025-10-19T23:31:21.116Z"
+    },
+    {
+      "id": "task_1760916671755_fzycc14rm",
+      "name": "Navigate to TikTok",
+      "status": "completed",
+      "startTime": "2025-10-19T23:31:21.117Z",
+      "endTime": "2025-10-19T23:31:27.251Z"
+    },
+    {
+      "id": "task_1760916671755_aoxvi953c",
+      "name": "Perform Login",
+      "status": "completed",
+      "startTime": "2025-10-19T23:31:27.279Z",
+      "result": {
+        "success": false,
+        "error": "Protocol error (Input.dispatchMouseEvent): Target closed",
+        "account": {
+          "username": "dopija1607@fixwap.com",
+          "password": "P@ssw0rd"
+        }
+      },
+      "endTime": "2025-10-19T23:31:46.905Z"
+    }
+  ],
+  "totalTasks": 5,
+  "completedTasks": 5
+}

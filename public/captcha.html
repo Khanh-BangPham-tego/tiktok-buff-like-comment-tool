@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPTCHA Solver Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .captcha-dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .captcha-queue {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .queue-header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .captcha-item {
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .captcha-item:last-child {
+            border-bottom: none;
+        }
+        
+        .captcha-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .captcha-type {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            display: inline-block;
+            width: fit-content;
+        }
+        
+        .captcha-url {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        
+        .captcha-screenshot {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .captcha-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .btn-solve {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .btn-skip {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .btn-solve:hover {
+            background: #218838;
+        }
+        
+        .btn-skip:hover {
+            background: #c82333;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .instructions h4 {
+            margin: 0 0 10px 0;
+            color: #495057;
+        }
+        
+        .instructions ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+            color: #6c757d;
+        }
+        
+        .no-captchas {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .refresh-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: #ccc;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .refresh-toggle.active {
+            background: #28a745;
+        }
+        
+        .refresh-toggle::after {
+            content: '';
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        
+        .refresh-toggle.active::after {
+            transform: translateX(25px);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="captcha-dashboard">
+        <div class="dashboard-header">
+            <h1>🎯 CAPTCHA Solver Dashboard</h1>
+            <p>Giải CAPTCHA cho TikTok Bot automation</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCaptchas">0</div>
+                <div class="stat-label">Total CAPTCHAs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingCaptchas">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="solvedCaptchas">0</div>
+                <div class="stat-label">Solved</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="timeoutCaptchas">0</div>
+                <div class="stat-label">Timeout</div>
+            </div>
+        </div>
+
+        <div class="captcha-queue">
+            <div class="queue-header">
+                <h3>📋 CAPTCHA Queue</h3>
+                <div class="auto-refresh">
+                    <span>Auto-refresh:</span>
+                    <div class="refresh-toggle active" id="refreshToggle"></div>
+                    <button onclick="refreshQueue()" class="btn-solve" style="padding: 5px 15px; font-size: 0.9em;">Refresh</button>
+                </div>
+            </div>
+            
+            <div id="captchaList">
+                <div class="loading">🔄 Loading CAPTCHAs...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let refreshInterval;
+        let isAutoRefresh = true;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshQueue();
+            setupAutoRefresh();
+            setupRefreshToggle();
+        });
+
+        // Setup auto refresh toggle
+        function setupRefreshToggle() {
+            const toggle = document.getElementById('refreshToggle');
+            toggle.addEventListener('click', function() {
+                isAutoRefresh = !isAutoRefresh;
+                toggle.classList.toggle('active');
+                
+                if (isAutoRefresh) {
+                    setupAutoRefresh();
+                } else {
+                    clearInterval(refreshInterval);
+                }
+            });
+        }
+
+        // Setup auto refresh
+        function setupAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+            
+            if (isAutoRefresh) {
+                refreshInterval = setInterval(refreshQueue, 5000); // Refresh every 5 seconds
+            }
+        }
+
+        // Refresh CAPTCHA queue
+        async function refreshQueue() {
+            try {
+                const response = await fetch('/api/captcha/queue');
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateStats(data.data.stats);
+                    updateCaptchaList(data.data.captchas);
+                } else {
+                    showError('Lỗi khi tải CAPTCHA queue: ' + data.message);
+                }
+            } catch (error) {
+                showError('Lỗi kết nối: ' + error.message);
+            }
+        }
+
+        // Update statistics
+        function updateStats(stats) {
+            document.getElementById('totalCaptchas').textContent = stats.total;
+            document.getElementById('pendingCaptchas').textContent = stats.pending;
+            document.getElementById('solvedCaptchas').textContent = stats.solved;
+            document.getElementById('timeoutCaptchas').textContent = stats.timeout;
+        }
+
+        // Update CAPTCHA list
+        function updateCaptchaList(captchas) {
+            const captchaList = document.getElementById('captchaList');
+            
+            if (captchas.length === 0) {
+                captchaList.innerHTML = '<div class="no-captchas">🎉 Không có CAPTCHA nào cần giải!</div>';
+                return;
+            }
+
+            captchaList.innerHTML = captchas.map(captcha => `
+                <div class="captcha-item">
+                    <div class="captcha-info">
+                        <div class="captcha-type">${getCaptchaTypeIcon(captcha.captchaInfo.type)} ${captcha.captchaInfo.type.toUpperCase()}</div>
+                        <div><strong>ID:</strong> ${captcha.notificationId}</div>
+                        <div><strong>Time:</strong> ${new Date(captcha.timestamp).toLocaleString()}</div>
+                        <div><strong>URL:</strong> <a href="${captcha.url}" target="_blank" class="captcha-url">${captcha.url}</a></div>
+                        <div class="instructions">
+                            <h4>📝 Hướng dẫn:</h4>
+                            <ul>
+                                ${captcha.instructions.map(instruction => `<li>${instruction}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="captcha-screenshot-container">
+                        ${captcha.screenshot ? `<img src="data:image/png;base64,${captcha.screenshot}" class="captcha-screenshot" alt="CAPTCHA Screenshot">` : '<div class="no-screenshot">No screenshot available</div>'}
+                    </div>
+                    <div class="captcha-actions">
+                        <button class="btn-solve" onclick="solveCaptcha('${captcha.notificationId}', true)">
+                            ✅ Mark as Solved
+                        </button>
+                        <button class="btn-skip" onclick="solveCaptcha('${captcha.notificationId}', false)">
+                            ❌ Skip/Timeout
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get CAPTCHA type icon
+        function getCaptchaTypeIcon(type) {
+            switch (type) {
+                case 'slider': return '🎚️';
+                case 'click': return '🖱️';
+                case 'text': return '⌨️';
+                default: return '❓';
+            }
+        }
+
+        // Solve CAPTCHA
+        async function solveCaptcha(notificationId, solved) {
+            try {
+                const response = await fetch('/api/captcha/solve', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        notificationId: notificationId,
+                        solved: solved,
+                        solvedBy: 'Web UI User',
+                        notes: solved ? 'Solved via Web UI' : 'Skipped via Web UI'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showSuccess(`CAPTCHA ${solved ? 'đã được giải thành công' : 'đã được skip'}!`);
+                    refreshQueue(); // Refresh immediately
+                } else {
+                    showError('Lỗi khi giải CAPTCHA: ' + data.message);
+                }
+            } catch (error) {
+                showError('Lỗi kết nối: ' + error.message);
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            
+            const dashboard = document.querySelector('.captcha-dashboard');
+            dashboard.insertBefore(errorDiv, dashboard.firstChild);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success';
+            successDiv.textContent = message;
+            
+            const dashboard = document.querySelector('.captcha-dashboard');
+            dashboard.insertBefore(successDiv, dashboard.firstChild);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>

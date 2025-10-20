@@ -13,7 +13,13 @@
     "dev:edge": "ts-node src/main.ts --edge --no-proxy",
     "ui": "node server.js",
     "watch": "tsc --watch",
-    "scrape": "ts-node src/main.ts"
+    "scrape": "ts-node src/main.ts",
+    "test:captcha": "ts-node test-captcha.ts captcha",
+    "test:login": "ts-node test-captcha.ts login",
+    "test:login:real": "ts-node test-captcha.ts login --real",
+    "demo:basic": "ts-node demo-captcha.ts basic",
+    "demo:manual": "ts-node demo-captcha.ts manual",
+    "test:captcha-api": "node test-captcha-api.js"
   },
   "keywords": [
     "tiktok",
@@ -28,6 +34,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "node-fetch": "^3.3.2",
     "puppeteer": "^24.25.0"
   },
   "devDependencies": {
