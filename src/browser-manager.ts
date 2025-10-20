@@ -18,7 +18,7 @@ export class BrowserManager {
   async init(): Promise<void> {
     console.log('🚀 Khởi tạo browser như user thật...');
     this.browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       defaultViewport: null,
       ignoreDefaultArgs: ['--enable-automation'],
       args: [
@@ -127,7 +127,7 @@ export class BrowserManager {
     
     // Launch options
     const launchOptions: any = {
-      headless: false,
+      headless: true,
       ignoreDefaultArgs: ['--enable-automation'],
       defaultViewport: null,
       userDataDir: userDataDir,
